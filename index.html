@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Big Boss Barbershop — Запись онлайн</title>
+<meta name="description" content="Big Boss Barbershop — мужская парикмахерская. Стрижки, борода, бритьё. Запись по телефону +7 702 000 28 38.">
+
+<!-- Google Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<!-- Tailwind (Play CDN) -->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<!-- AOS -->
+<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<!-- GSAP -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink:      '#0B0B0B',
+          panel:    '#151513',
+          panel2:   '#1D1D1A',
+          gold:     '#F5C518',
+          goldDeep: '#C89A11',
+          bone:     '#F3EFE4',
+          bonedim:  'rgba(243,239,228,0.62)',
+        },
+        fontFamily: {
+          display: ['Anton', 'sans-serif'],
+          body: ['Manrope', 'sans-serif'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    background: #0B0B0B;
+    color: #F3EFE4;
+    font-family: 'Manrope', sans-serif;
+    overflow-x: hidden;
+    width: 100%;
+  }
+  * { box-sizing: border-box; }
+  .font-display { font-family: 'Anton', sans-serif; letter-spacing: 0.01em; }
+
+  /* Ribbon eyebrow — echoes the banner shape under the logo */
+  .ribbon {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    background: #F5C518;
+    color: #0B0B0B;
+    clip-path: polygon(0 0, 90% 0, 100% 50%, 90% 100%, 0 100%);
+    padding: 0.5rem 2.1rem 0.5rem 1.1rem;
+    font-family: 'Anton', sans-serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.16em;
+  }
+
+  /* razor-thin gold hairline */
+  .hairline { height: 1px; background: linear-gradient(90deg, transparent, rgba(245,197,24,0.55), transparent); }
+
+  /* subtle comb-tooth texture divider */
+  .comb-divider {
+    height: 14px;
+    background-image: repeating-linear-gradient(90deg, rgba(245,197,24,0.35) 0 2px, transparent 2px 14px);
+  }
+
+  .grain::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    pointer-events: none;
+  }
+
+  .card {
+    background: #151513;
+    border: 1px solid rgba(245,197,24,0.14);
+    transition: border-color .35s ease, transform .35s ease, background .35s ease;
+  }
+  .card:hover { border-color: rgba(245,197,24,0.55); transform: translateY(-4px); background: #1D1D1A; }
+
+  .btn-gold {
+    background: #F5C518;
+    color: #0B0B0B;
+    font-family: 'Anton', sans-serif;
+    letter-spacing: 0.06em;
+    transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  }
+  .btn-gold:hover { background: #FFD53D; transform: translateY(-2px); box-shadow: 0 10px 30px -8px rgba(245,197,24,0.55); }
+
+  .btn-ghost {
+    border: 1.5px solid rgba(243,239,228,0.35);
+    color: #F3EFE4;
+    transition: border-color .25s ease, background .25s ease;
+  }
+  .btn-ghost:hover { border-color: #F5C518; background: rgba(245,197,24,0.08); }
+
+  input, select {
+    background: #0B0B0B;
+    border: 1.5px solid rgba(243,239,228,0.18);
+    color: #F3EFE4;
+    transition: border-color .2s ease;
+  }
+  input::placeholder { color: rgba(243,239,228,0.35); }
+  input:focus, select:focus { outline: none; border-color: #F5C518; }
+
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible {
+    outline: 2px solid #F5C518; outline-offset: 2px;
+  }
+
+  .nav-shadow { box-shadow: 0 8px 24px -12px rgba(0,0,0,0.6); }
+
+  .marquee-track { display: flex; width: max-content; animation: marquee 26s linear infinite; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquee-track { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  .num { font-family: 'Anton', sans-serif; color: rgba(245,197,24,0.28); }
+
+  ::selection { background: #F5C518; color: #0B0B0B; }
+</style>
+</head>
+
+<body class="antialiased">
+
+<!-- ============ NAV ============ -->
+<header id="siteHeader" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-ink/80 backdrop-blur-md">
+  <div class="max-w-7xl mx-auto px-5 md:px-8">
+    <div class="flex items-center justify-between h-[68px]">
+      <a href="#top" class="flex items-center gap-3 shrink-0">
+        <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="h-11 w-11 rounded-full object-cover border border-gold/40">
+        <span class="font-display text-lg tracking-wide hidden sm:block">BIG BOSS</span>
+      </a>
+
+      <nav class="hidden md:flex items-center gap-8 font-body text-sm text-bonedim">
+        <a href="#about" class="hover:text-gold transition-colors">О нас</a>
+        <a href="#services" class="hover:text-gold transition-colors">Услуги</a>
+        <a href="#why" class="hover:text-gold transition-colors">Почему мы</a>
+        <a href="#booking" class="hover:text-gold transition-colors">Запись</a>
+        <a href="#contacts" class="hover:text-gold transition-colors">Контакты</a>
+      </nav>
+
+      <div class="hidden md:flex items-center gap-4">
+        <a href="tel:+77020002838" class="text-sm text-bone hover:text-gold transition-colors">+7 702 000 28 38</a>
+        <a href="#booking" class="btn-gold px-5 py-2.5 text-sm uppercase">Записаться</a>
+      </div>
+
+      <button id="burger" aria-label="Открыть меню" class="md:hidden text-bone">
+        <i data-lucide="menu" class="w-7 h-7"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- mobile menu -->
+  <div id="mobileMenu" class="md:hidden hidden flex-col bg-panel border-t border-gold/15 px-6 py-5 gap-4">
+    <a href="#about" class="py-2 text-bone">О нас</a>
+    <a href="#services" class="py-2 text-bone">Услуги</a>
+    <a href="#why" class="py-2 text-bone">Почему мы</a>
+    <a href="#booking" class="py-2 text-bone">Запись</a>
+    <a href="#contacts" class="py-2 text-bone">Контакты</a>
+    <a href="tel:+77020002838" class="py-2 text-gold font-semibold">+7 702 000 28 38</a>
+    <a href="#booking" class="btn-gold text-center px-5 py-3 text-sm uppercase mt-1">Записаться</a>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="relative min-h-[100svh] flex items-center pt-24 pb-16 overflow-hidden grain">
+  <!-- ambient silhouette -->
+  <div class="pointer-events-none absolute -right-24 top-0 bottom-0 w-[70%] max-w-[820px] opacity-[0.07]">
+    <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="" class="w-full h-full object-contain object-right grayscale">
+  </div>
+  <div class="pointer-events-none absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-ink to-transparent"></div>
+
+  <div class="relative max-w-7xl mx-auto px-5 md:px-8 w-full grid lg:grid-cols-[1.15fr_0.85fr] gap-14 items-center">
+    <div>
+      <div class="ribbon mb-7" data-aos="fade-right">Барбершоп полного цикла</div>
+
+      <h1 class="font-display uppercase leading-[0.92] text-[15vw] sm:text-6xl md:text-7xl lg:text-[5.4rem]">
+        <span class="block text-bone" data-aos="fade-up" data-aos-delay="80">Big</span>
+        <span class="block text-gold" data-aos="fade-up" data-aos-delay="180">Boss</span>
+        <span class="block text-bone text-[7vw] sm:text-3xl md:text-4xl lg:text-[2.6rem] mt-2" data-aos="fade-up" data-aos-delay="260">Barbershop</span>
+      </h1>
+
+      <p class="mt-7 max-w-md text-bonedim text-base md:text-lg" data-aos="fade-up" data-aos-delay="340">
+        Чёткие линии, честный уход за бородой и атмосфера, в которой время в кресле — не потерянное время.
+        Работаем по записи, без спешки.
+      </p>
+
+      <div class="mt-9 flex flex-wrap gap-4" data-aos="fade-up" data-aos-delay="420">
+        <a href="#booking" class="btn-gold px-8 py-4 text-sm uppercase inline-flex items-center gap-2">
+          <i data-lucide="calendar-check" class="w-4 h-4"></i> Записаться
+        </a>
+        <a href="tel:+77020002838" class="btn-ghost px-8 py-4 text-sm uppercase inline-flex items-center gap-2 rounded-sm">
+          <i data-lucide="phone" class="w-4 h-4"></i> Позвонить
+        </a>
+      </div>
+
+      <div class="mt-10 flex items-center gap-3 text-sm text-bonedim" data-aos="fade-up" data-aos-delay="480">
+        <i data-lucide="map-pin" class="w-4 h-4 text-gold shrink-0"></i>
+        <span>ул. Зои Космодемьянской, 38а</span>
+      </div>
+    </div>
+
+    <div class="relative flex justify-center lg:justify-end" data-aos="zoom-in" data-aos-delay="200">
+      <div class="absolute inset-0 m-auto w-[80%] h-[80%] rounded-full bg-gold/10 blur-3xl"></div>
+      <div class="relative w-64 sm:w-80 lg:w-96 aspect-square rounded-full border border-gold/30 p-3">
+        <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Логотип Big Boss Barbershop" class="w-full h-full object-cover rounded-full">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- marquee strip -->
+<div class="border-y border-gold/15 bg-panel py-3 overflow-hidden">
+  <div class="marquee-track font-display uppercase text-sm md:text-base tracking-widest text-gold/70">
+    <span class="px-6">Стрижки</span><span class="px-2">•</span>
+    <span class="px-6">Борода</span><span class="px-2">•</span>
+    <span class="px-6">Бритьё опасной бритвой</span><span class="px-2">•</span>
+    <span class="px-6">Камуфляж седины</span><span class="px-2">•</span>
+    <span class="px-6">Детские стрижки</span><span class="px-2">•</span>
+    <span class="px-6">Стрижки</span><span class="px-2">•</span>
+    <span class="px-6">Борода</span><span class="px-2">•</span>
+    <span class="px-6">Бритьё опасной бритвой</span><span class="px-2">•</span>
+    <span class="px-6">Камуфляж седины</span><span class="px-2">•</span>
+    <span class="px-6">Детские стрижки</span><span class="px-2">•</span>
+  </div>
+</div>
+
+<!-- ============ ABOUT ============ -->
+<section id="about" class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+  <div class="grid lg:grid-cols-[0.9fr_1.1fr] gap-14 items-center">
+    <div data-aos="fade-right">
+      <div class="ribbon mb-6">О нас</div>
+      <h2 class="font-display uppercase text-4xl md:text-5xl leading-[0.95] text-bone">
+        Барбершоп,<br>а не парикмахерская
+      </h2>
+      <p class="mt-6 text-bonedim leading-relaxed">
+        Big Boss — это место для мужчин, которые ценят свой вид и своё время. Мы убрали всё лишнее:
+        нет очередей, нет случайных мастеров — только запись на конкретное время и барбер,
+        который разбирается в форме вашей головы, а не только в машинке.
+      </p>
+      <p class="mt-4 text-bonedim leading-relaxed">
+        Чёрный интерьер, жёлтый свет, запах хорошего одеколона — и результат, который держится
+        до следующей записи.
+      </p>
+
+      <div class="mt-9 grid grid-cols-3 gap-6">
+        <div>
+          <div class="font-display text-3xl md:text-4xl text-gold">7</div>
+          <div class="text-xs text-bonedim uppercase tracking-wide mt-1">Дней в неделю</div>
+        </div>
+        <div>
+          <div class="font-display text-3xl md:text-4xl text-gold">100%</div>
+          <div class="text-xs text-bonedim uppercase tracking-wide mt-1">По записи</div>
+        </div>
+        <div>
+          <div class="font-display text-3xl md:text-4xl text-gold">1</div>
+          <div class="text-xs text-bonedim uppercase tracking-wide mt-1">Мастер на клиента</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative" data-aos="fade-left">
+      <div class="card rounded-lg p-10 md:p-14 flex flex-col items-center text-center">
+        <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="w-40 md:w-52 mb-6">
+        <p class="font-display uppercase text-gold text-lg tracking-wide">Стиль. Уверенность. Статус.</p>
+        <div class="hairline w-24 my-5"></div>
+        <p class="text-bonedim text-sm max-w-xs">
+          Три слова, которыми мы измеряем каждую стрижку, прежде чем снять пелерину.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="comb-divider max-w-7xl mx-auto"></div>
+
+<!-- ============ SERVICES ============ -->
+<section id="services" class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+  <div class="max-w-2xl mb-14" data-aos="fade-up">
+    <div class="ribbon mb-6">Услуги</div>
+    <h2 class="font-display uppercase text-4xl md:text-5xl text-bone leading-[0.95]">Прайс на уверенность</h2>
+    <p class="mt-5 text-bonedim">Итоговую стоимость и длительность мастер уточнит при записи — она зависит от густоты и длины волос.</p>
+  </div>
+
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+
+    <div class="card rounded-lg p-7" data-aos="fade-up" data-aos-delay="0">
+      <div class="flex items-start justify-between mb-6">
+        <i data-lucide="scissors" class="w-8 h-8 text-gold"></i>
+        <span class="num text-3xl">01</span>
+      </div>
+      <h3 class="font-display uppercase text-xl text-bone mb-2">Мужская стрижка</h3>
+      <p class="text-bonedim text-sm mb-5">Машинка + ножницы, оформление контура, укладка.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gold/10">
+        <span class="text-gold font-display text-xl">от 4 000 ₸</span>
+        <span class="text-xs text-bonedim">~40 мин</span>
+      </div>
+    </div>
+
+    <div class="card rounded-lg p-7" data-aos="fade-up" data-aos-delay="80">
+      <div class="flex items-start justify-between mb-6">
+        <i data-lucide="axe" class="w-8 h-8 text-gold"></i>
+        <span class="num text-3xl">02</span>
+      </div>
+      <h3 class="font-display uppercase text-xl text-bone mb-2">Оформление бороды</h3>
+      <p class="text-bonedim text-sm mb-5">Форма, контур, увлажнение и укладка бороды.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gold/10">
+        <span class="text-gold font-display text-xl">от 3 000 ₸</span>
+        <span class="text-xs text-bonedim">~30 мин</span>
+      </div>
+    </div>
+
+    <div class="card rounded-lg p-7" data-aos="fade-up" data-aos-delay="160">
+      <div class="flex items-start justify-between mb-6">
+        <i data-lucide="droplets" class="w-8 h-8 text-gold"></i>
+        <span class="num text-3xl">03</span>
+      </div>
+      <h3 class="font-display uppercase text-xl text-bone mb-2">Бритьё опасной бритвой</h3>
+      <p class="text-bonedim text-sm mb-5">Горячее полотенце, пена, классическое бритьё.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gold/10">
+        <span class="text-gold font-display text-xl">от 3 500 ₸</span>
+        <span class="text-xs text-bonedim">~30 мин</span>
+      </div>
+    </div>
+
+    <div class="card rounded-lg p-7" data-aos="fade-up" data-aos-delay="0">
+      <div class="flex items-start justify-between mb-6">
+        <i data-lucide="sparkles" class="w-8 h-8 text-gold"></i>
+        <span class="num text-3xl">04</span>
+      </div>
+      <h3 class="font-display uppercase text-xl text-bone mb-2">Стрижка + борода</h3>
+      <p class="text-bonedim text-sm mb-5">Комплекс: полная стрижка и оформление бороды.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gold/10">
+        <span class="text-gold font-display text-xl">от 6 500 ₸</span>
+        <span class="text-xs text-bonedim">~65 мин</span>
+      </div>
+    </div>
+
+    <div class="card rounded-lg p-7" data-aos="fade-up" data-aos-delay="80">
+      <div class="flex items-start justify-between mb-6">
+        <i data-lucide="palette" class="w-8 h-8 text-gold"></i>
+        <span class="num text-3xl">05</span>
+      </div>
+      <h3 class="font-display uppercase text-xl text-bone mb-2">Камуфляж седины</h3>
+      <p class="text-bonedim text-sm mb-5">Тонирование волос и бороды натуральным составом.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gold/10">
+        <span class="text-gold font-display text-xl">от 4 500 ₸</span>
+        <span class="text-xs text-bonedim">~40 мин</span>
+      </div>
+    </div>
+
+    <div class="card rounded-lg p-7" data-aos="fade-up" data-aos-delay="160">
+      <div class="flex items-start justify-between mb-6">
+        <i data-lucide="baby" class="w-8 h-8 text-gold"></i>
+        <span class="num text-3xl">06</span>
+      </div>
+      <h3 class="font-display uppercase text-xl text-bone mb-2">Детская стрижка</h3>
+      <p class="text-bonedim text-sm mb-5">До 12 лет, в спокойном темпе, с игрушкой в подарок.</p>
+      <div class="flex items-center justify-between pt-4 border-t border-gold/10">
+        <span class="text-gold font-display text-xl">от 3 000 ₸</span>
+        <span class="text-xs text-bonedim">~30 мин</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ WHY US ============ -->
+<section id="why" class="bg-panel border-y border-gold/10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+    <div class="max-w-2xl mb-14" data-aos="fade-up">
+      <div class="ribbon mb-6">Почему мы</div>
+      <h2 class="font-display uppercase text-4xl md:text-5xl text-bone leading-[0.95]">Три причины сесть в наше кресло</h2>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-10">
+      <div data-aos="fade-up" data-aos-delay="0">
+        <i data-lucide="clock-4" class="w-9 h-9 text-gold mb-5"></i>
+        <h3 class="font-display uppercase text-lg text-bone mb-3">Точное время</h3>
+        <p class="text-bonedim text-sm leading-relaxed">Запись на конкретный слот — вы приходите и сразу садитесь в кресло, без ожидания в очереди.</p>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="100">
+        <i data-lucide="award" class="w-9 h-9 text-gold mb-5"></i>
+        <h3 class="font-display uppercase text-lg text-bone mb-3">Опытные барберы</h3>
+        <p class="text-bonedim text-sm leading-relaxed">Мастера, которые постоянно оттачивают форму, линию роста волос и работу с бородой.</p>
+      </div>
+      <div data-aos="fade-up" data-aos-delay="200">
+        <i data-lucide="shield-check" class="w-9 h-9 text-gold mb-5"></i>
+        <h3 class="font-display uppercase text-lg text-bone mb-3">Чистота и уход</h3>
+        <p class="text-bonedim text-sm leading-relaxed">Стерилизация инструмента после каждого клиента и уходовая косметика в процедурах.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ BOOKING ============ -->
+<section id="booking" class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+  <div class="grid lg:grid-cols-[0.85fr_1.15fr] gap-14">
+    <div data-aos="fade-right">
+      <div class="ribbon mb-6">Запись</div>
+      <h2 class="font-display uppercase text-4xl md:text-5xl text-bone leading-[0.95]">Забронировать время</h2>
+      <p class="mt-6 text-bonedim leading-relaxed">
+        Заполните форму — заявка уйдёт нам в WhatsApp с уже готовым сообщением,
+        останется только отправить его. Мы подтвердим точное время в ответ.
+      </p>
+
+      <div class="mt-9 space-y-4">
+        <a href="tel:+77020002838" class="flex items-center gap-4 group">
+          <span class="w-11 h-11 rounded-full bg-panel border border-gold/25 flex items-center justify-center shrink-0 group-hover:border-gold transition-colors">
+            <i data-lucide="phone" class="w-4 h-4 text-gold"></i>
+          </span>
+          <span class="text-bone group-hover:text-gold transition-colors">+7 702 000 28 38</span>
+        </a>
+        <a href="https://www.instagram.com/big.boss.barbershop?igsi=YnNtem9uNWV1NXV0" target="_blank" rel="noopener" class="flex items-center gap-4 group">
+          <span class="w-11 h-11 rounded-full bg-panel border border-gold/25 flex items-center justify-center shrink-0 group-hover:border-gold transition-colors">
+            <i data-lucide="instagram" class="w-4 h-4 text-gold"></i>
+          </span>
+          <span class="text-bone group-hover:text-gold transition-colors">@big.boss.barbershop</span>
+        </a>
+        <div class="flex items-center gap-4">
+          <span class="w-11 h-11 rounded-full bg-panel border border-gold/25 flex items-center justify-center shrink-0">
+            <i data-lucide="map-pin" class="w-4 h-4 text-gold"></i>
+          </span>
+          <span class="text-bone">ул. Зои Космодемьянской, 38а</span>
+        </div>
+      </div>
+    </div>
+
+    <form id="bookingForm" class="card rounded-lg p-7 md:p-10" data-aos="fade-left">
+      <div class="grid sm:grid-cols-2 gap-5">
+        <div class="sm:col-span-2">
+          <label for="fname" class="block text-xs uppercase tracking-wide text-bonedim mb-2">Имя</label>
+          <input id="fname" name="fname" type="text" required placeholder="Как к вам обращаться" class="w-full rounded-sm px-4 py-3 text-sm">
+        </div>
+
+        <div>
+          <label for="fphone" class="block text-xs uppercase tracking-wide text-bonedim mb-2">Телефон</label>
+          <input id="fphone" name="fphone" type="tel" required placeholder="+7 7__ ___ __ __" class="w-full rounded-sm px-4 py-3 text-sm">
+        </div>
+
+        <div>
+          <label for="fservice" class="block text-xs uppercase tracking-wide text-bonedim mb-2">Услуга</label>
+          <select id="fservice" name="fservice" required class="w-full rounded-sm px-4 py-3 text-sm">
+            <option value="" disabled selected>Выберите услугу</option>
+            <option>Мужская стрижка</option>
+            <option>Оформление бороды</option>
+            <option>Бритьё опасной бритвой</option>
+            <option>Стрижка + борода</option>
+            <option>Камуфляж седины</option>
+            <option>Детская стрижка</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="fdate" class="block text-xs uppercase tracking-wide text-bonedim mb-2">Дата</label>
+          <input id="fdate" name="fdate" type="date" required class="w-full rounded-sm px-4 py-3 text-sm">
+        </div>
+
+        <div>
+          <label for="ftime" class="block text-xs uppercase tracking-wide text-bonedim mb-2">Время</label>
+          <input id="ftime" name="ftime" type="time" required class="w-full rounded-sm px-4 py-3 text-sm">
+        </div>
+
+        <div class="sm:col-span-2">
+          <label for="fnote" class="block text-xs uppercase tracking-wide text-bonedim mb-2">Комментарий (необязательно)</label>
+          <input id="fnote" name="fnote" type="text" placeholder="Пожелания к мастеру или стрижке" class="w-full rounded-sm px-4 py-3 text-sm">
+        </div>
+      </div>
+
+      <button type="submit" class="btn-gold w-full mt-7 py-4 text-sm uppercase inline-flex items-center justify-center gap-2">
+        <i data-lucide="send" class="w-4 h-4"></i> Отправить заявку в WhatsApp
+      </button>
+      <p class="text-center text-xs text-bonedim mt-4">Нажимая кнопку, вы перейдёте в WhatsApp с готовым сообщением для отправки нам.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ============ CONTACTS ============ -->
+<section id="contacts" class="bg-panel border-t border-gold/10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-24 md:py-32">
+    <div class="max-w-2xl mb-14" data-aos="fade-up">
+      <div class="ribbon mb-6">Контакты</div>
+      <h2 class="font-display uppercase text-4xl md:text-5xl text-bone leading-[0.95]">Как нас найти</h2>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-10 items-stretch">
+      <div class="space-y-6" data-aos="fade-right">
+        <div class="card rounded-lg p-7 flex items-start gap-5">
+          <i data-lucide="map-pin" class="w-6 h-6 text-gold shrink-0 mt-1"></i>
+          <div>
+            <div class="text-xs uppercase tracking-wide text-bonedim mb-1">Адрес</div>
+            <div class="text-bone">ул. Зои Космодемьянской, 38а</div>
+          </div>
+        </div>
+        <div class="card rounded-lg p-7 flex items-start gap-5">
+          <i data-lucide="phone" class="w-6 h-6 text-gold shrink-0 mt-1"></i>
+          <div>
+            <div class="text-xs uppercase tracking-wide text-bonedim mb-1">Телефон</div>
+            <a href="tel:+77020002838" class="text-bone hover:text-gold transition-colors">+7 702 000 28 38</a>
+          </div>
+        </div>
+        <div class="card rounded-lg p-7 flex items-start gap-5">
+          <i data-lucide="instagram" class="w-6 h-6 text-gold shrink-0 mt-1"></i>
+          <div>
+            <div class="text-xs uppercase tracking-wide text-bonedim mb-1">Instagram</div>
+            <a href="https://www.instagram.com/big.boss.barbershop?igsi=YnNtem9uNWV1NXV0" target="_blank" rel="noopener" class="text-bone hover:text-gold transition-colors">@big.boss.barbershop</a>
+          </div>
+        </div>
+        <div class="card rounded-lg p-7 flex items-start gap-5">
+          <i data-lucide="clock" class="w-6 h-6 text-gold shrink-0 mt-1"></i>
+          <div>
+            <div class="text-xs uppercase tracking-wide text-bonedim mb-1">Режим работы</div>
+            <div class="text-bone">Ежедневно, 10:00 — 21:00</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rounded-lg overflow-hidden border border-gold/15 min-h-[320px]" data-aos="fade-left">
+        <iframe
+          src="https://www.google.com/maps?q=%D1%83%D0%BB%D0%B8%D1%86%D0%B0%20%D0%97%D0%BE%D0%B8%20%D0%9A%D0%BE%D1%81%D0%BC%D0%BE%D0%B4%D0%B5%D0%BC%D1%8C%D1%8F%D0%BD%D1%81%D0%BA%D0%BE%D0%B9%2038%D0%B0&output=embed"
+          class="w-full h-full min-h-[320px] grayscale-[0.3] contrast-125"
+          style="border:0;" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+          title="Карта: улица Зои Космодемьянской, 38а"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-gold/10">
+  <div class="max-w-7xl mx-auto px-5 md:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
+    <a href="#top" class="flex items-center gap-3">
+      <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="h-9 w-9 rounded-full object-cover border border-gold/40">
+      <span class="font-display uppercase text-sm tracking-wide text-bone">Big Boss Barbershop</span>
+    </a>
+
+    <div class="flex items-center gap-5">
+      <a href="tel:+77020002838" aria-label="Позвонить" class="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center hover:border-gold hover:text-gold transition-colors">
+        <i data-lucide="phone" class="w-4 h-4"></i>
+      </a>
+      <a href="https://www.instagram.com/big.boss.barbershop?igsi=YnNtem9uNWV1NXV0" target="_blank" rel="noopener" aria-label="Instagram" class="w-10 h-10 rounded-full border border-gold/20 flex items-center justify-center hover:border-gold hover:text-gold transition-colors">
+        <i data-lucide="instagram" class="w-4 h-4"></i>
+      </a>
+    </div>
+
+    <p class="text-xs text-bonedim">© 2026 Big Boss Barbershop. Все права защищены.</p>
+  </div>
+</footer>
+
+<!-- ============ SCRIPTS ============ -->
+<script>
+  // Icons
+  lucide.createIcons();
+
+  // AOS
+  AOS.init({ duration: 700, once: true, offset: 60, easing: 'ease-out-cubic' });
+
+  // Mobile menu
+  const burger = document.getElementById('burger');
+  const mobileMenu = document.getElementById('mobileMenu');
+  burger.addEventListener('click', () => {
+    const isHidden = mobileMenu.classList.contains('hidden');
+    mobileMenu.classList.toggle('hidden');
+    mobileMenu.classList.toggle('flex');
+    burger.innerHTML = isHidden ? '<i data-lucide="x" class="w-7 h-7"></i>' : '<i data-lucide="menu" class="w-7 h-7"></i>';
+    lucide.createIcons();
+  });
+  document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
+    mobileMenu.classList.add('hidden');
+    mobileMenu.classList.remove('flex');
+    burger.innerHTML = '<i data-lucide="menu" class="w-7 h-7"></i>';
+    lucide.createIcons();
+  }));
+
+  // Header shrink on scroll
+  const header = document.getElementById('siteHeader');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 30) header.classList.add('nav-shadow');
+    else header.classList.remove('nav-shadow');
+  });
+
+  // GSAP hero entrance polish (subtle, respects reduced motion)
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap) {
+    gsap.from('#siteHeader', { y: -20, opacity: 0, duration: 0.6, ease: 'power2.out' });
+  }
+
+  // Booking form -> WhatsApp
+  const form = document.getElementById('bookingForm');
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const name = document.getElementById('fname').value.trim();
+    const phone = document.getElementById('fphone').value.trim();
+    const service = document.getElementById('fservice').value;
+    const date = document.getElementById('fdate').value;
+    const time = document.getElementById('ftime').value;
+    const note = document.getElementById('fnote').value.trim();
+
+    let msg = `Здравствуйте! Хочу записаться в Big Boss Barbershop.%0A`;
+    msg += `Имя: ${name}%0A`;
+    msg += `Телефон: ${phone}%0A`;
+    msg += `Услуга: ${service}%0A`;
+    msg += `Дата: ${date}%0A`;
+    msg += `Время: ${time}%0A`;
+    if (note) msg += `Комментарий: ${note}%0A`;
+
+    window.open(`https://wa.me/77020002838?text=${msg}`, '_blank');
+  });
+</script>
+
+</body>
+</html>
