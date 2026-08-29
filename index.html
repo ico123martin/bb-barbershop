@@ -14,14 +14,17 @@
 <!-- Tailwind (Play CDN) -->
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- AOS -->
-<link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+<!-- AOS (jsDelivr — стабильнее unpkg в СНГ-регионе) -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
-<!-- Lucide Icons -->
-<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Lucide Icons (jsDelivr) -->
+<script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
 
 <!-- GSAP -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<!-- AOS script (jsDelivr) -->
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.1/dist/aos.js"></script>
 
 <script>
   tailwind.config = {
@@ -135,17 +138,31 @@
   .num { font-family: 'Anton', sans-serif; color: rgba(245,197,24,0.28); }
 
   ::selection { background: #F5C518; color: #0B0B0B; }
+
+  /* ЗАЩИТА ОТ НЕВИДИМОГО КОНТЕНТА:
+     Если AOS не загрузится или JS упадёт до вызова AOS.init(),
+     элементы с data-aos никогда не получат класс aos-animate
+     и останутся с opacity:0 навсегда. Эти правила гарантируют,
+     что контент будет виден в любом случае. */
+  @media (prefers-reduced-motion: reduce), (scripting: none) {
+    [data-aos] { opacity: 1 !important; transform: none !important; }
+  }
+  noscript [data-aos] { opacity: 1 !important; transform: none !important; }
 </style>
 </head>
 
 <body class="antialiased">
+
+<noscript>
+  <style>[data-aos]{opacity:1 !important; transform:none !important;}</style>
+</noscript>
 
 <!-- ============ NAV ============ -->
 <header id="siteHeader" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-ink/80 backdrop-blur-md">
   <div class="max-w-7xl mx-auto px-5 md:px-8">
     <div class="flex items-center justify-between h-[68px]">
       <a href="#top" class="flex items-center gap-3 shrink-0">
-        <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="h-11 w-11 rounded-full object-cover border border-gold/40">
+        <img src="https://cdn.jsdelivr.net/gh/ico123martin/bb-barbershop@main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="h-11 w-11 rounded-full object-cover border border-gold/40" loading="eager">
         <span class="font-display text-lg tracking-wide hidden sm:block">BIG BOSS</span>
       </a>
 
@@ -184,7 +201,7 @@
 <section id="top" class="relative min-h-[100svh] flex items-center pt-24 pb-16 overflow-hidden grain">
   <!-- ambient silhouette -->
   <div class="pointer-events-none absolute -right-24 top-0 bottom-0 w-[70%] max-w-[820px] opacity-[0.07]">
-    <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="" class="w-full h-full object-contain object-right grayscale">
+    <img src="https://cdn.jsdelivr.net/gh/ico123martin/bb-barbershop@main/IMG_5777.jpeg" alt="" class="w-full h-full object-contain object-right grayscale">
   </div>
   <div class="pointer-events-none absolute top-0 left-0 right-0 h-40 bg-gradient-to-b from-ink to-transparent"></div>
 
@@ -221,7 +238,7 @@
     <div class="relative flex justify-center lg:justify-end" data-aos="zoom-in" data-aos-delay="200">
       <div class="absolute inset-0 m-auto w-[80%] h-[80%] rounded-full bg-gold/10 blur-3xl"></div>
       <div class="relative w-64 sm:w-80 lg:w-96 aspect-square rounded-full border border-gold/30 p-3">
-        <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Логотип Big Boss Barbershop" class="w-full h-full object-cover rounded-full">
+        <img src="https://cdn.jsdelivr.net/gh/ico123martin/bb-barbershop@main/IMG_5777.jpeg" alt="Логотип Big Boss Barbershop" class="w-full h-full object-cover rounded-full">
       </div>
     </div>
   </div>
@@ -279,7 +296,7 @@
 
     <div class="relative" data-aos="fade-left">
       <div class="card rounded-lg p-10 md:p-14 flex flex-col items-center text-center">
-        <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="w-40 md:w-52 mb-6">
+        <img src="https://cdn.jsdelivr.net/gh/ico123martin/bb-barbershop@main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="w-40 md:w-52 mb-6">
         <p class="font-display uppercase text-gold text-lg tracking-wide">Стиль. Уверенность. Статус.</p>
         <div class="hairline w-24 my-5"></div>
         <p class="text-bonedim text-sm max-w-xs">
@@ -548,7 +565,7 @@
 <footer class="border-t border-gold/10">
   <div class="max-w-7xl mx-auto px-5 md:px-8 py-12 flex flex-col md:flex-row items-center justify-between gap-6">
     <a href="#top" class="flex items-center gap-3">
-      <img src="https://raw.githubusercontent.com/ico123martin/bb-barbershop/main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="h-9 w-9 rounded-full object-cover border border-gold/40">
+      <img src="https://cdn.jsdelivr.net/gh/ico123martin/bb-barbershop@main/IMG_5777.jpeg" alt="Big Boss Barbershop" class="h-9 w-9 rounded-full object-cover border border-gold/40">
       <span class="font-display uppercase text-sm tracking-wide text-bone">Big Boss Barbershop</span>
     </a>
 
@@ -566,63 +583,109 @@
 </footer>
 
 <!-- ============ SCRIPTS ============ -->
+<!-- Каждый блок независим: падение одной библиотеки не блокирует остальной сайт -->
+
 <script>
-  // Icons
-  lucide.createIcons();
+  // Иконки Lucide
+  try {
+    if (window.lucide) lucide.createIcons();
+  } catch (e) { console.warn('lucide init failed', e); }
+</script>
 
-  // AOS
-  AOS.init({ duration: 700, once: true, offset: 60, easing: 'ease-out-cubic' });
+<script>
+  // AOS-анимации появления
+  try {
+    if (window.AOS) {
+      AOS.init({ duration: 700, once: true, offset: 60, easing: 'ease-out-cubic' });
+    }
+  } catch (e) { console.warn('AOS init failed', e); }
 
-  // Mobile menu
-  const burger = document.getElementById('burger');
-  const mobileMenu = document.getElementById('mobileMenu');
-  burger.addEventListener('click', () => {
-    const isHidden = mobileMenu.classList.contains('hidden');
-    mobileMenu.classList.toggle('hidden');
-    mobileMenu.classList.toggle('flex');
-    burger.innerHTML = isHidden ? '<i data-lucide="x" class="w-7 h-7"></i>' : '<i data-lucide="menu" class="w-7 h-7"></i>';
-    lucide.createIcons();
-  });
-  document.querySelectorAll('#mobileMenu a').forEach(a => a.addEventListener('click', () => {
-    mobileMenu.classList.add('hidden');
-    mobileMenu.classList.remove('flex');
-    burger.innerHTML = '<i data-lucide="menu" class="w-7 h-7"></i>';
-    lucide.createIcons();
-  }));
+  // Страховка: если AOS не загрузился или не инициализировался за 2.5с,
+  // принудительно показываем весь скрытый контент, чтобы сайт не оставался пустым.
+  setTimeout(function () {
+    document.querySelectorAll('[data-aos]').forEach(function (el) {
+      if (!el.classList.contains('aos-animate')) {
+        el.classList.add('aos-animate');
+      }
+    });
+  }, 2500);
+</script>
 
-  // Header shrink on scroll
-  const header = document.getElementById('siteHeader');
-  window.addEventListener('scroll', () => {
-    if (window.scrollY > 30) header.classList.add('nav-shadow');
-    else header.classList.remove('nav-shadow');
-  });
+<script>
+  // Мобильное меню — не зависит от внешних библиотек
+  try {
+    var burger = document.getElementById('burger');
+    var mobileMenu = document.getElementById('mobileMenu');
+    if (burger && mobileMenu) {
+      burger.addEventListener('click', function () {
+        var isHidden = mobileMenu.classList.contains('hidden');
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
+        burger.innerHTML = isHidden
+          ? '<i data-lucide="x" class="w-7 h-7"></i>'
+          : '<i data-lucide="menu" class="w-7 h-7"></i>';
+        try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+      });
+      document.querySelectorAll('#mobileMenu a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          mobileMenu.classList.add('hidden');
+          mobileMenu.classList.remove('flex');
+          burger.innerHTML = '<i data-lucide="menu" class="w-7 h-7"></i>';
+          try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+        });
+      });
+    }
+  } catch (e) { console.warn('mobile menu init failed', e); }
+</script>
 
-  // GSAP hero entrance polish (subtle, respects reduced motion)
-  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap) {
-    gsap.from('#siteHeader', { y: -20, opacity: 0, duration: 0.6, ease: 'power2.out' });
-  }
+<script>
+  // Затенение хедера при скролле
+  try {
+    var header = document.getElementById('siteHeader');
+    if (header) {
+      window.addEventListener('scroll', function () {
+        if (window.scrollY > 30) header.classList.add('nav-shadow');
+        else header.classList.remove('nav-shadow');
+      });
+    }
+  } catch (e) { console.warn('header scroll init failed', e); }
+</script>
 
-  // Booking form -> WhatsApp
-  const form = document.getElementById('bookingForm');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    const name = document.getElementById('fname').value.trim();
-    const phone = document.getElementById('fphone').value.trim();
-    const service = document.getElementById('fservice').value;
-    const date = document.getElementById('fdate').value;
-    const time = document.getElementById('ftime').value;
-    const note = document.getElementById('fnote').value.trim();
+<script>
+  // Лёгкая GSAP-анимация хедера при загрузке (необязательный декор)
+  try {
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && window.gsap) {
+      gsap.from('#siteHeader', { y: -20, opacity: 0, duration: 0.6, ease: 'power2.out' });
+    }
+  } catch (e) { console.warn('gsap init failed', e); }
+</script>
 
-    let msg = `Здравствуйте! Хочу записаться в Big Boss Barbershop.%0A`;
-    msg += `Имя: ${name}%0A`;
-    msg += `Телефон: ${phone}%0A`;
-    msg += `Услуга: ${service}%0A`;
-    msg += `Дата: ${date}%0A`;
-    msg += `Время: ${time}%0A`;
-    if (note) msg += `Комментарий: ${note}%0A`;
+<script>
+  // Форма записи -> WhatsApp
+  try {
+    var form = document.getElementById('bookingForm');
+    if (form) {
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = document.getElementById('fname').value.trim();
+        var phone = document.getElementById('fphone').value.trim();
+        var service = document.getElementById('fservice').value;
+        var date = document.getElementById('fdate').value;
+        var time = document.getElementById('ftime').value;
+        var note = document.getElementById('fnote').value.trim();
 
-    window.open(`https://wa.me/77020002838?text=${msg}`, '_blank');
-  });
+        var msg = 'Здравствуйте! Хочу записаться в Big Boss Barbershop.%0A';
+        msg += 'Имя: ' + name + '%0A';
+        msg += 'Телефон: ' + phone + '%0A';
+        msg += 'Услуга: ' + service + '%0A';
+        msg += 'Дата: ' + date + '%0A';
+        msg += 'Время: ' + time + '%0A';
+        if (note) msg += 'Комментарий: ' + note + '%0A';
+
+        window.open('https://wa.me/77020002838?text=' + msg, '_blank');
+      });
+    }
+  } catch (e) { console.warn('booking form init failed', e); }
 </script>
 
 </body>
